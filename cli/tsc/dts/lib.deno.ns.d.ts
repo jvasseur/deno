@@ -3699,7 +3699,7 @@ declare namespace Deno {
     cmd: readonly string[] | [string | URL, ...string[]];
     /** The current working directory that should be used when running the
      * sub-process. */
-    cwd?: string;
+    cwd?: string | URL;
     /** Any environment variables to be set when running the sub-process. */
     env?: Record<string, string>;
     /** By default subprocess inherits `stdout` of parent process. To change

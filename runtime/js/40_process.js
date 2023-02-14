@@ -118,7 +118,7 @@ function run({
   }
   const res = opRun({
     cmd: ArrayPrototypeMap(cmd, String),
-    cwd,
+    cwd: pathFromURL(cwd),
     clearEnv,
     env: ObjectEntries(env),
     gid,

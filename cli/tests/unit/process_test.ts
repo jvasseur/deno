@@ -5,6 +5,7 @@ import {
   assertStrictEquals,
   assertStringIncludes,
   assertThrows,
+  pathToAbsoluteFileUrl,
 } from "./test_util.ts";
 
 Deno.test(
@@ -688,5 +689,22 @@ Deno.test(
     p.stdout.close();
     assertStrictEquals(code, 1);
     assertStringIncludes(stderr, "invalid module path");
+  },
+);
+
+Deno.test(
+  { permissions: { write: true, run: true, read: true } },
+  async function runWithURLCwd() {
+    const cwd = await Deno.makeTempDir({ prefix: "deno_command_test" });
+
+    const p = Deno.run({
+      cwd: pathToAbsoluteFileUrl(cwd),
+      cmd: [Deno.execPath(), "eval", "console.log(Deno.cwd())"],
+      stdout: "piped",
+    });
+
+    const stdout = new TextDecoder().decode(await p.output());
+    p.close();
+    assertEquals(stdout, cwd);
   },
 );
